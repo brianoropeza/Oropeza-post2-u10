@@ -1,0 +1,13 @@
+{
+	"id": "66666666-7777-8888-9999-000000000000",
+	"name": "ToDoApp-CI",
+	"values": [
+		{
+			"key": "baseUrl",
+			"value": "http://localhost:8080",
+			"type": "default",
+			"enabled": true
+		}
+	],
+	"_postman_variable_scope": "environment"
+}

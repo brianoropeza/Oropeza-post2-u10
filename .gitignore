@@ -1,0 +1,21 @@
+target/
+.idea/
+.vscode/
+*.iml
+.classpath
+.project
+.settings/
+.factorypath
+*.log
+HELP.md
+.mvn/
+mvnw
+mvnw.cmd
+# Selenium / WebDriverManager cache
+.cache/
+# Newman
+newman-report.json
+newman/
+# OS
+.DS_Store
+Thumbs.db

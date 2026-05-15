@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Tareas - ToDo App</title>
+    <style>
+        body { font-family: Arial, sans-serif; max-width: 720px; margin: 40px auto; padding: 0 20px; }
+        h1 { color: #2c3e50; }
+        .tarea-item { padding: 12px; border-bottom: 1px solid #eee; }
+        .tarea-item.completada { color: #999; text-decoration: line-through; }
+        .btn { display: inline-block; padding: 10px 18px; background: #3498db; color: #fff;
+               text-decoration: none; border-radius: 4px; margin-top: 12px; }
+        .empty { color: #888; font-style: italic; }
+    </style>
+</head>
+<body>
+    <h1>Mis Tareas</h1>
+
+    <a id="btn-nueva" class="btn" th:href="@{/tareas/nueva}">+ Nueva tarea</a>
+
+    <div id="lista-tareas" style="margin-top: 20px;">
+        <p class="empty" th:if="${#lists.isEmpty(tareas)}">No hay tareas registradas.</p>
+
+        <div class="tarea-item"
+             th:each="t : ${tareas}"
+             th:classappend="${t.completada} ? ' completada' : ''"
+             th:attr="data-id=${t.id}">
+            <strong class="tarea-titulo" th:text="${t.titulo}">Título</strong>
+            <span class="tarea-descripcion" th:text="${t.descripcion}">Descripción</span>
+        </div>
+    </div>
+</body>
+</html>

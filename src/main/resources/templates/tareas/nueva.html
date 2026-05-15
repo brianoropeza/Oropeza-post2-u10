@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Nueva Tarea</title>
+    <style>
+        body { font-family: Arial, sans-serif; max-width: 720px; margin: 40px auto; padding: 0 20px; }
+        h1 { color: #2c3e50; }
+        form { display: flex; flex-direction: column; gap: 12px; }
+        label { font-weight: bold; }
+        input[type=text], textarea {
+            padding: 10px; border: 1px solid #ccc; border-radius: 4px;
+            font-family: inherit; font-size: 14px;
+        }
+        button { padding: 10px 18px; background: #2ecc71; color: #fff;
+                 border: none; border-radius: 4px; cursor: pointer; }
+        button:hover { background: #27ae60; }
+        a { color: #3498db; }
+    </style>
+</head>
+<body>
+    <h1>Nueva Tarea</h1>
+
+    <form id="form-nueva-tarea" th:action="@{/tareas}" th:object="${tarea}" method="post">
+        <label for="titulo">Título</label>
+        <input id="titulo" type="text" th:field="*{titulo}" required/>
+
+        <label for="descripcion">Descripción</label>
+        <textarea id="descripcion" rows="3" th:field="*{descripcion}"></textarea>
+
+        <button id="btn-guardar" type="submit">Guardar</button>
+    </form>
+
+    <p style="margin-top: 16px;"><a th:href="@{/tareas}">&larr; Volver al listado</a></p>
+</body>
+</html>

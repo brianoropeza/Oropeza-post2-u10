@@ -1,0 +1,66 @@
+name: API Tests con Newman
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  api-test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout del código
+        uses: actions/checkout@v4
+
+      - name: Configurar Java 17
+        uses: actions/setup-java@v4
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+          cache: maven
+
+      - name: Compilar JAR (sin tests E2E)
+        run: mvn -B package -DskipTests
+
+      - name: Iniciar aplicación en segundo plano
+        run: |
+          nohup java -jar target/*.jar > app.log 2>&1 &
+          echo "Aplicación iniciando..."
+
+      - name: Esperar a que la app responda
+        run: |
+          for i in {1..30}; do
+            if curl -sf http://localhost:8080/actuator/health > /dev/null; then
+              echo "App responde, listos para los tests"
+              exit 0
+            fi
+            echo "Intento $i: app aún no responde, esperando 2s..."
+            sleep 2
+          done
+          echo "La aplicación no respondió a tiempo"
+          cat app.log
+          exit 1
+
+      - name: Configurar Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+
+      - name: Instalar Newman
+        run: npm install -g newman
+
+      - name: Ejecutar colección con Newman
+        run: |
+          newman run postman/ColeccionToDo.json \
+            --environment postman/env-ci.json \
+            --reporters cli,json \
+            --reporter-json-export newman-report.json
+
+      - name: Subir reporte de Newman como artifact
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: newman-report
+          path: newman-report.json
